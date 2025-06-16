@@ -15,37 +15,6 @@ This project implements a modern static website hosting solution on AWS with the
 - **AWS WAF**: Web Application Firewall for security
 - **Amazon CloudWatch**: Monitoring and alerting
 
-### Architecture Diagram
-
-\`\`\`
-┌─────────────┐    ┌──────────────┐    ┌─────────────┐
-│   Route 53  │───▶│  CloudFront  │───▶│     S3      │
-│    (DNS)    │    │    (CDN)     │    │  (Storage)  │
-└─────────────┘    └──────────────┘    └─────────────┘
-                           │
-                           ▼
-                   ┌──────────────┐
-                   │   AWS WAF    │
-                   │ (Security)   │
-                   └──────────────┘
-\`\`\`
-
-## 📁 Project Structure
-
-\`\`\`
-aws-static-website/
-├── src/                          # Website source files
-│   ├── index.html               # Main HTML file
-│   ├── style.css                # Stylesheet
-│   └── script.js                # JavaScript functionality
-├── aws/                         # AWS infrastructure and deployment
-│   ├── template.yaml            # CloudFormation template
-│   └── deploy.sh                # Deployment script
-├── Dockerfile                   # Docker configuration for local development
-├── .gitignore                   # Git ignore rules
-└── README.md                    # This file
-\`\`\`
-
 ## 🚀 Quick Start
 
 ### Prerequisites
