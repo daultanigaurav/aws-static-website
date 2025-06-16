@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Static Website Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1>🚀 AWS Static Site</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <h2 class="hero-title">Welcome to AWS Static Website</h2>
+                <p class="hero-subtitle">Deployed with S3 + CloudFront + Infrastructure as Code</p>
+                <button class="cta-button" onclick="showFeatures()">Explore Features</button>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">☁️</div>
+                        <h3>CloudFront CDN</h3>
+                        <p>Global content delivery with edge locations worldwide</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🗄️</div>
+                        <h3>S3 Storage</h3>
+                        <p>Reliable and scalable static website hosting</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>SSL/TLS</h3>
+                        <p>Secure HTTPS with AWS Certificate Manager</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>High Performance</h3>
+                        <p>Optimized for speed and reliability</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2>Get In Touch</h2>
+                <p>This is a demo static website showcasing AWS deployment capabilities.</p>
+                <div class="contact-info">
+                    <p>📧 Email: demo@example.com</p>
+                    <p>🌐 GitHub: github.com/your-username/aws-static-website</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 AWS Static Website Demo. Built with ❤️ and deployed on AWS.</p>
+            <p>Last updated: <span id="last-updated"></span></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
