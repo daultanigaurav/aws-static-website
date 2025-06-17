@@ -8,12 +8,12 @@ This project implements a modern static website hosting solution on AWS with the
 
 ### AWS Services Used
 
-- **Amazon S3**: Static website hosting and storage
-- **Amazon CloudFront**: Global CDN for fast content delivery
-- **AWS Certificate Manager (ACM)**: SSL/TLS certificates for HTTPS
-- **Amazon Route 53**: DNS management and domain routing
-- **AWS WAF**: Web Application Firewall for security
-- **Amazon CloudWatch**: Monitoring and alerting
+- **Amazon S3:** Static website hosting and storage
+- **Amazon CloudFront:** Global CDN for fast content delivery
+- **AWS Certificate Manager (ACM):** SSL/TLS certificates for HTTPS
+- **Amazon Route 53:** DNS management and domain routing
+- **AWS WAF:** Web Application Firewall for security
+- **Amazon CloudWatch:** Monitoring and alerting
 
 ## 🚀 Quick Start
 
@@ -21,69 +21,64 @@ This project implements a modern static website hosting solution on AWS with the
 
 Before you begin, ensure you have:
 
-- [AWS CLI](https://aws.amazon.com/cli/) installed and configured
-- [Docker](https://www.docker.com/) installed (for local development)
-- [jq](https://stedolan.github.io/jq/) installed (for JSON parsing)
+- AWS CLI installed and configured
+- Docker installed (for local development)
+- `jq` installed (for JSON parsing)
 - An AWS account with appropriate permissions
 - A registered domain name (optional, for custom domain)
 
 ### 1. Clone and Setup
 
-\`\`\`bash
+```bash
 git clone <your-repo-url>
 cd aws-static-website
-\`\`\`
+```
 
 ### 2. Configure AWS Credentials
 
-\`\`\`bash
+```bash
 aws configure
-# Enter your AWS Access Key ID, Secret Access Key, and default region
-\`\`\`
+Enter your AWS Access Key ID, Secret Access Key, and default region
+```
 
 ### 3. Deploy Infrastructure
 
-\`\`\`bash
-# Deploy the CloudFormation stack
-aws cloudformation deploy \\
-  --template-file aws/template.yaml \\
-  --stack-name my-static-website \\
-  --parameter-overrides \\
-    DomainName=yourdomain.com \\
-    SubdomainName=www \\
-    HostedZoneId=Z1234567890ABC \\
-    Environment=prod \\
-  --capabilities CAPABILITY_IAM \\
+```bash
+aws cloudformation deploy \
+  --template-file aws/template.yaml \
+  --stack-name my-static-website \
+  --parameter-overrides \
+    DomainName=yourdomain.com \
+    SubdomainName=www \
+    HostedZoneId=Z1234567890ABC \
+    Environment=prod \
+  --capabilities CAPABILITY_IAM \
   --region us-east-1
-\`\`\`
+```
 
 ### 4. Deploy Website Files
 
-\`\`\`bash
-# Make the deployment script executable
+```bash
 chmod +x aws/deploy.sh
-
-# Deploy your website
 ./aws/deploy.sh --stack-name my-static-website
-\`\`\`
+```
 
 ## 🛠️ Local Development
 
 ### Using Docker
 
-\`\`\`bash
-# Build and run the development container
+```bash
 docker build --target development -t my-static-website:dev .
-docker run -p 8080:80 -v \$(pwd)/src:/usr/share/nginx/html my-static-website:dev
+docker run -p 8080:80 -v $(pwd)/src:/usr/share/nginx/html my-static-website:dev
+```
 
-# Access your site at http://localhost:8080
-\`\`\`
+Access your site at [http://localhost:8080](http://localhost:8080).
 
 ### Using Docker Compose (Optional)
 
-Create a \`docker-compose.yml\` file:
+Create a `docker-compose.yml`:
 
-\`\`\`yaml
+```yaml
 version: '3.8'
 services:
   website:
@@ -97,135 +92,110 @@ services:
     environment:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
-\`\`\`
+```
 
 Then run:
 
-\`\`\`bash
+```bash
 docker-compose up -d
-\`\`\`
+```
 
 ## 📋 Deployment Guide
 
 ### Manual Deployment
 
-1. **Deploy Infrastructure First**:
-   \`\`\`bash
-   aws cloudformation deploy \\
-     --template-file aws/template.yaml \\
-     --stack-name your-stack-name \\
-     --parameter-overrides \\
-       DomainName=yourdomain.com \\
-       SubdomainName=www \\
-       HostedZoneId=YOUR_HOSTED_ZONE_ID \\
-       Environment=prod
-   \`\`\`
+1️⃣ Deploy Infrastructure first:
 
-2. **Deploy Website Files**:
-   \`\`\`bash
-   ./aws/deploy.sh --stack-name your-stack-name
-   \`\`\`
+```bash
+aws cloudformation deploy \
+  --template-file aws/template.yaml \
+  --stack-name your-stack-name \
+  --parameter-overrides \
+    DomainName=yourdomain.com \
+    SubdomainName=www \
+    HostedZoneId=YOUR_HOSTED_ZONE_ID \
+    Environment=prod
+```
+
+2️⃣ Deploy Website files:
+
+```bash
+./aws/deploy.sh --stack-name your-stack-name
+```
 
 ### Deployment Script Options
 
-The \`deploy.sh\` script supports various options:
-
-\`\`\`bash
-# Basic deployment
+```bash
 ./aws/deploy.sh --stack-name my-website
-
-# With custom environment and profile
 ./aws/deploy.sh --stack-name my-website --environment staging --profile my-profile
-
-# Dry run to see what would be deployed
 ./aws/deploy.sh --stack-name my-website --dry-run
-
-# Verbose output for debugging
 ./aws/deploy.sh --stack-name my-website --verbose
-\`\`\`
-
-### Script Parameters
+```
 
 | Parameter | Description | Default |
-|-----------|-------------|---------|
-| \`--stack-name\` | CloudFormation stack name | Required |
-| \`--environment\` | Environment (dev/staging/prod) | prod |
-| \`--profile\` | AWS CLI profile | Default profile |
-| \`--region\` | AWS region | us-east-1 |
-| \`--dry-run\` | Show commands without executing | false |
-| \`--verbose\` | Enable verbose output | false |
+|------------|------------|---------|
+| `--stack-name` | CloudFormation stack name | **Required** |
+| `--environment` | Environment (dev/staging/prod) | `prod` |
+| `--profile` | AWS CLI profile | Default profile |
+| `--region` | AWS region | `us-east-1` |
+| `--dry-run` | Shows what would be deployed | `false` |
+| `--verbose` | Enables verbose output | `false` |  
 
 ## 🔧 Configuration
 
-### CloudFormation Parameters
-
-Update these parameters in the CloudFormation template or pass them during deployment:
+### CloudFormation Parameter Overrides:
 
 | Parameter | Description | Example |
-|-----------|-------------|---------|
-| \`DomainName\` | Your domain name | example.com |
-| \`SubdomainName\` | Subdomain for the website | www |
-| \`HostedZoneId\` | Route53 hosted zone ID | Z1234567890ABC |
-| \`Environment\` | Environment name | prod |
+|---------|---------|---------|
+| `DomainName` | Your domain name | `example.com` |
+| `SubdomainName` | Subdomain for the website | `www` |
+| `HostedZoneId` | Route53 hosted zone ID | `Z1234567890ABC` |
+| `Environment` | Environment name | `prod` |  
 
-### Environment Variables
+### Environment Variables:
 
-For local development, you can create a \`.env\` file:
+Create `.env`:
 
-\`\`\`bash
+```bash
 AWS_PROFILE=your-profile
 AWS_REGION=us-east-1
 STACK_NAME=my-static-website
 DOMAIN_NAME=yourdomain.com
-\`\`\`
+```
 
 ## 🔒 Security Features
 
-This template includes several security best practices:
-
-### AWS WAF Protection
-- Common attack patterns blocked
-- Known bad inputs filtered
-- Rate limiting capabilities
-
-### CloudFront Security Headers
-- X-Frame-Options: DENY
-- X-Content-Type-Options: nosniff
-- X-XSS-Protection: 1; mode=block
-- Strict-Transport-Security
-- Content-Security-Policy
-
-### S3 Security
-- Public access blocked
-- Encryption at rest
-- Versioning enabled
-- Access logging
+- AWS WAF Protection (common attack patterns, rate limiting, blocklist).
+- CloudFront Security Headers (X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Strict-Transport-Security, Content-Security-Policy).
+- S3 (public block, encryption at rest, versioning, logging).
 
 ## 📊 Monitoring and Logging
 
-### CloudWatch Alarms
-- CloudFront error rate monitoring
+### CloudWatch Alarms:
+
+- CloudFront error rate
 - Automatic notifications for high error rates
 
-### Access Logs
-- CloudFront access logs stored in S3
-- S3 access logs for audit trail
+### Access Logs:
 
-### Monitoring Dashboard
+- CloudFront and S3 Access Logs for Audit
 
-You can create a CloudWatch dashboard to monitor:
-- Request count and error rates
-- Cache hit ratio
-- Origin response times
-- WAF blocked requests
+### Dashboard:
+
+- CloudWatch Dashboard for:
+  - Request count
+  - Error rates
+  - Cache hit ratio
+  - Origin response times
+  - WAF blocked requests
 
 ## 🚀 CI/CD Integration
 
-### GitHub Actions Example
+### GitHub Actions Example:
 
-Create \`.github/workflows/deploy.yml\`:
+Create `.github/workflows/deploy.yml`:
 
-\`\`\`yaml
+```yaml
 name: Deploy to AWS
 
 on:
@@ -235,128 +205,114 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: \${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: \${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-    
-    - name: Deploy to S3 and CloudFront
-      run: |
-        chmod +x aws/deploy.sh
-        ./aws/deploy.sh --stack-name \${{ secrets.STACK_NAME }}
-\`\`\`
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to S3 and CloudFront
+        run: |
+          chmod +x aws/deploy.sh
+          ./aws/deploy.sh --stack-name ${{ secrets.STACK_NAME }}
+```
 
 ## 🧪 Testing
 
-### Local Testing
+### Local Testing:
 
-\`\`\`bash
-# Test with Docker
+```bash
 docker build --target production -t my-static-website:prod .
 docker run -p 8080:8080 my-static-website:prod
+```
 
-# Test deployment script (dry run)
+### Deployment Script (Dry Run)
+
+```bash
 ./aws/deploy.sh --stack-name test-stack --dry-run
-\`\`\`
+```
 
-### Load Testing
+### Loading:
 
-Use tools like Apache Bench or Artillery to test performance:
-
-\`\`\`bash
-# Simple load test
+```bash
 ab -n 1000 -c 10 https://yourdomain.com/
+```
 
-# Or with Artillery
+```bash
 npm install -g artillery
 artillery quick --count 10 --num 100 https://yourdomain.com/
-\`\`\`
+```
 
 ## 🔧 Troubleshooting
 
-### Common Issues
+| Issue | Solution |
+|---------|---------|
+| Certificate Validation Fails | Validate DNS and ACM in us-east-1 |
+| CloudFront Distribution Fails | Check Origin Access and S3 policy |
+| Deployment Script Fails | Validate AWS credentials, `jq` installation, stack, and permissions |
+| AWS CLI `aws s3 sync` Fails | Check AWS CLI config, permissions, and policy |  
 
-1. **Certificate Validation Fails**
-   - Ensure DNS records are properly configured
-   - Certificate must be in us-east-1 region for CloudFront
+### Debugging:
 
-2. **CloudFront Distribution Not Working**
-   - Check Origin Access Control settings
-   - Verify S3 bucket policy allows CloudFront access
-
-3. **Deployment Script Fails**
-   - Verify AWS credentials and permissions
-   - Check if jq is installed
-   - Ensure CloudFormation stack exists
-
-### Debug Commands
-
-\`\`\`bash
-# Check AWS credentials
+```bash
 aws sts get-caller-identity
-
-# Verify stack outputs
 aws cloudformation describe-stacks --stack-name your-stack-name
-
-# Test S3 sync (dry run)
 aws s3 sync src/ s3://your-bucket-name --dryrun
-
-# Check CloudFront distribution status
-aws cloudfront get-distribution --id YOUR_DISTRIBUTION_ID
-\`\`\`
+aws cloudfront get-distribution --id YOUR_ID
+```
 
 ## 💰 Cost Optimization
 
-### Estimated Monthly Costs
+### Estimated Monthly Costs:
 
-For a typical small website:
-- S3 storage: \$1-5/month
-- CloudFront: \$1-10/month
-- Route53: \$0.50/month per hosted zone
-- Certificate Manager: Free
-- WAF: \$1-5/month
+|          | Cost |
+|---------|---------|
+| S3 | $1-5 |
+| CloudFront | $1-10 |
+| Route53 | $0.50 |
+| ACM | Free |
+| WAF | $1-5 |  
 
-### Cost Optimization Tips
+### Tips:
 
-1. Use CloudFront price class optimization
-2. Enable S3 lifecycle policies for old versions
-3. Monitor and set up billing alerts
-4. Use S3 Intelligent Tiering for larger sites
+- CloudFront price class optimization
+- S3 lifecycle policies
+- Billing alerts
+- S3 Intelligent Tiering for large sites
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+1️⃣ Fork the repository  
+2️⃣ Create a feature branch  
+3️⃣ Make your changes  
+4️⃣ Test thoroughly  
+5️⃣ Submit a pull request  
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the `LICENSE` file for details.
 
 ## 🆘 Support
 
 If you encounter issues:
 
-1. Check the troubleshooting section
-2. Review AWS CloudFormation events
-3. Check CloudWatch logs
-4. Open an issue in this repository
+- Check this README first
+- Review AWS CloudFormation events
+- Check CloudWatch logs
+- Open an Issue in this repository
 
 ## 🔗 Useful Links
 
-- [AWS S3 Static Website Hosting](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html)
-- [CloudFront Documentation](https://docs.aws.amazon.com/cloudfront/)
-- [AWS CLI Reference](https://docs.aws.amazon.com/cli/)
-- [CloudFormation Template Reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/)
+- [AWS S3 Static Website Hosting](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)  
+- [CloudFront Documentation](https://docs.aws.amazon.com/cloudfront/)  
+- [AWS CLI Reference](https://awscli.amazonaws.com/)  
+- [CloudFormation Template Reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-reference.html)  
 
 ---
 
-**Happy Deploying! 🚀**
-\`\`\`
+🚀 Happy Deploying!  
